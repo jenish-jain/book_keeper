@@ -8,13 +8,9 @@ import (
 var AppConfig Config
 
 type Config struct {
-	MongoConfig mongoConfig
-}
-
-type mongoConfig struct {
-	Host       string `mapstructure:"MONGO_HOST"`
-	RWUser     string `mapstructure:"MONGO_RW_USERNAME"`
-	RWPassword string `mapstructure:"MONGO_RW_PASSWORD"`
+	MongoHost       string `mapstructure:"MONGO_HOST"`
+	MongoRWUser     string `mapstructure:"MONGO_RW_USERNAME"`
+	MongoRWPassword string `mapstructure:"MONGO_RW_PASSWORD"`
 }
 
 func InitConfig(configName string) *Config {

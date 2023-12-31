@@ -8,8 +8,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 func main() {
@@ -17,8 +17,7 @@ func main() {
 	// Uses the SetServerAPIOptions() method to set the Stable API version to 1
 	configStore := config.InitConfig("production")
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	mongoconfigs := configStore.MongoConfig
-	mongoUri := fmt.Sprintf("mongodb+srv://%s:%s@%s/", mongoconfigs.RWUser, mongoconfigs.RWPassword, mongoconfigs.Host)
+	mongoUri := fmt.Sprintf("mongodb+srv://%s:%s@%s/", configStore.MongoRWUser, configStore.MongoRWPassword, configStore.MongoHost)
 	clientOptions := options.Client().ApplyURI(mongoUri).SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -35,23 +34,23 @@ func main() {
 	}
 
 	// Read a PDF file
-	pdfFile, err := ioutil.ReadFile(getAssetsPathName("example.pdf"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	//pdfFile, err := os.ReadFile(getAssetsPathName("example.pdf"))
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
 	// Store the PDF file in MongoDB
-	uploadStream, err := bucket.OpenUploadStream("example.pdf")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer uploadStream.Close()
-
-	fileSize, err := uploadStream.Write(pdfFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Uploaded a file of size: %d\n", fileSize)
+	//uploadStream, err := bucket.OpenUploadStream("example.pdf")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//defer uploadStream.Close()
+	//
+	//fileSize, err := uploadStream.Write(pdfFile)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Printf("Uploaded a file of size: %d\n", fileSize)
 
 	// Retrieve the PDF file from MongoD
 
@@ -63,7 +62,7 @@ func main() {
 	}
 	fmt.Printf("File size to download: %v\n", dStream)
 	downloadFileName := "example-download.pdf"
-	err = ioutil.WriteFile(getAssetsPathName(downloadFileName), buf.Bytes(), 0600)
+	err = os.WriteFile(getAssetsPathName(downloadFileName), buf.Bytes(), 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
