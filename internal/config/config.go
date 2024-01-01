@@ -8,6 +8,8 @@ import (
 var AppConfig Config
 
 type Config struct {
+	ServerPort      int    `mapstructure:"SERVER_PORT"`
+	LogLevel        string `mapstructure:"LOG_LEVEL"`
 	MongoHost       string `mapstructure:"MONGO_HOST"`
 	MongoRWUser     string `mapstructure:"MONGO_RW_USERNAME"`
 	MongoRWPassword string `mapstructure:"MONGO_RW_PASSWORD"`
@@ -32,5 +34,9 @@ func InitConfig(configName string) *Config {
 		panic(fmt.Errorf("fatal error unable to Unmarshal Config file: %s", err))
 	}
 
+	return &AppConfig
+}
+
+func GetConfig() *Config {
 	return &AppConfig
 }

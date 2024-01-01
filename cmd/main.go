@@ -2,6 +2,7 @@ package main
 
 import (
 	"book_keeper/internal/config"
+	"book_keeper/internal/logger"
 	"bytes"
 	"context"
 	"fmt"
@@ -16,6 +17,9 @@ func main() {
 	// MongoDB's connection string
 	// Uses the SetServerAPIOptions() method to set the Stable API version to 1
 	configStore := config.InitConfig("production")
+	logger.Init(configStore.LogLevel)
+	serverDependencies, _ := InitDependencies()
+	serverDependencies.server.Run(serverDependencies.handlers)
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	mongoUri := fmt.Sprintf("mongodb+srv://%s:%s@%s/", configStore.MongoRWUser, configStore.MongoRWPassword, configStore.MongoHost)
 	clientOptions := options.Client().ApplyURI(mongoUri).SetServerAPIOptions(serverAPI)
