@@ -15,38 +15,38 @@ func (k *LoggerTestSuite) SetupTest() {
 }
 
 func (k *LoggerTestSuite) TestShouldPrintLogs() {
-	log := logger.Init("debug")
+	logger.Init("debug")
 
 	msg := "I am debug"
 	fmt.Println("---Debug---")
-	log.Debug(msg)
-	log.Info(msg)
-	log.Warn(msg)
-	log.Error(msg)
+	logger.Debug(msg)
+	logger.Info(msg)
+	logger.Warn(msg)
+	logger.Error(msg)
 
 	msg = "I am info"
-	log = logger.Init("info")
+	logger.Init("info")
 	fmt.Println("---Info---")
-	log.Debug(msg)
-	log.Info(msg)
-	log.Warn(msg)
-	log.Error(msg)
+	logger.Debug(msg)
+	logger.Info(msg)
+	logger.Warn(msg)
+	logger.Error(msg)
 
 	msg = "I am warn"
-	log = logger.Init("warn")
+	logger.Init("warn")
 	fmt.Println("---Warn---")
-	log.Debug(msg)
-	log.Info(msg)
-	log.Warn(msg)
-	log.Error(msg)
+	logger.Debug(msg)
+	logger.Info(msg)
+	logger.Warn(msg)
+	logger.Error(msg)
 
 	msg = "I am error"
-	log = logger.Init("error")
+	logger.Init("error")
 	fmt.Println("---Error---")
-	log.Debug(msg)
-	log.Info(msg)
-	log.Warn(msg)
-	log.Error(msg)
+	logger.Debug(msg)
+	logger.Info(msg)
+	logger.Warn(msg)
+	logger.Error(msg)
 }
 
 func TestLoggerTestSuite(t *testing.T) {

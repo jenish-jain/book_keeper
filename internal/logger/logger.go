@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var log *slog.Logger
+
 type Logger interface {
 	Debug(log string)
 	Info(log string)
@@ -14,45 +16,40 @@ type Logger interface {
 }
 
 type Impl struct {
-	logger *slog.Logger
 }
 
 /*
 Debug log
 */
-func (i *Impl) Debug(log string) {
-	i.logger.Debug(log)
+func Debug(logMsg string, args ...any) {
+	log.Debug(logMsg, args...)
 }
 
 /*
 Info log
 */
-func (i *Impl) Info(log string) {
-	i.logger.Info(log)
+func Info(logMsg string, args ...any) {
+	log.Info(logMsg, args...)
 }
 
 /*
 Warn log
 */
-func (i *Impl) Warn(log string) {
-	i.logger.Warn(log)
+func Warn(logMsg string, args ...any) {
+	log.Warn(logMsg, args...)
 }
 
 /*
 Error log
 */
-func (i *Impl) Error(log string) {
-	i.logger.Error(log)
+func Error(logMsg string, args ...any) {
+	log.Error(logMsg, args...)
 }
 
-func Init(logLevel string) *Impl {
+func Init(logLevel string) {
 	handlerOptions := slog.HandlerOptions{Level: getLogLevel(logLevel)}
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
-	slog.SetDefault(logger)
-	loggerInstance := &Impl{
-		logger: logger,
-	}
-	return loggerInstance
+	log = slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
+	slog.SetDefault(log)
 }
 
 func getLogLevel(level string) slog.Level {
