@@ -14,6 +14,7 @@ type Config struct {
 	MongoHost       string `mapstructure:"MONGO_HOST"`
 	MongoRWUser     string `mapstructure:"MONGO_RW_USERNAME"`
 	MongoRWPassword string `mapstructure:"MONGO_RW_PASSWORD"`
+	AssetsDb        string `mapstructure:"ASSETS_DATABASE"`
 }
 
 func InitConfig(configName string) *Config {
@@ -48,7 +49,7 @@ func (c *Config) GetServerPort() int {
 }
 
 func (c *Config) GetMongoConfig() *mongo.Config {
-	return mongo.NewConfig(c.MongoHost, c.MongoRWUser, c.MongoRWPassword, "")
+	return mongo.NewConfig(c.MongoHost, c.MongoRWUser, c.MongoRWPassword, c.AssetsDb)
 }
 
 func GetConfig() *Config {

@@ -26,7 +26,7 @@ func (s *ConfigTestSuite) TestGetServerPort() {
 }
 
 func (s *ConfigTestSuite) TestGetMongoConfig() {
-	expectedMongoConfig := mongo.NewConfig("mongo.dev:70217", "read_user", "secret", "")
+	expectedMongoConfig := mongo.NewConfig("mongo.dev:70217", "read_user", "secret", "book_keeper")
 	assert.Equal(s.T(), expectedMongoConfig, s.config.GetMongoConfig())
 }
 
