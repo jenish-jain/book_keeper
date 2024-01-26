@@ -49,7 +49,7 @@ func NewServer(c *config.Config) *Server {
 func (s *Server) Run(h Handlers) {
 	s.InitRoutes(h)
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%s", strconv.Itoa(s.config.ServerPort)),
+		Addr:    fmt.Sprintf(":%s", strconv.Itoa(s.config.GetServerPort())),
 		Handler: s.engine,
 	}
 	go listenServer(srv)
