@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"context"
 	"log/slog"
 	"os"
 	"strings"
@@ -9,10 +10,12 @@ import (
 var log *slog.Logger
 
 type Logger interface {
-	Debug(log string)
-	Info(log string)
-	Error(log string)
-	Warn(log string)
+	Debug(log string, args ...any)
+	DebugWithCtx(ctx context.Context, logMsg string, args ...any)
+	Info(log string, args ...any)
+	Error(log string, args ...any)
+	ErrorWithCtx(ctx context.Context, logMsg string, args ...any)
+	Warn(log string, args ...any)
 }
 
 type Impl struct {
@@ -23,6 +26,10 @@ Debug log
 */
 func Debug(logMsg string, args ...any) {
 	log.Debug(logMsg, args...)
+}
+
+func DebugWithCtx(ctx context.Context, logMsg string, args ...any) {
+	log.DebugContext(ctx, logMsg, args...)
 }
 
 /*
@@ -44,6 +51,10 @@ Error log
 */
 func Error(logMsg string, args ...any) {
 	log.Error(logMsg, args...)
+}
+
+func ErrorWithCtx(ctx context.Context, logMsg string, args ...any) {
+	log.ErrorContext(ctx, logMsg, args...)
 }
 
 func Init(logLevel string) {
