@@ -1,6 +1,7 @@
 package config
 
 import (
+	"book_keeper/internal/mongo"
 	"fmt"
 	"github.com/spf13/viper"
 )
@@ -21,6 +22,7 @@ func InitConfig(configName string) *Config {
 	viper.SetConfigType("env")
 	viper.AddConfigPath("config")
 	viper.AddConfigPath("../config/")
+	viper.AddConfigPath("../../config/")
 
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using Config file:", viper.ConfigFileUsed())
@@ -35,6 +37,18 @@ func InitConfig(configName string) *Config {
 	}
 
 	return &AppConfig
+}
+
+func (c *Config) GetLogLevel() string {
+	return c.LogLevel
+}
+
+func (c *Config) GetServerPort() int {
+	return c.ServerPort
+}
+
+func (c *Config) GetMongoConfig() *mongo.Config {
+	return mongo.NewConfig(c.MongoHost, c.MongoRWUser, c.MongoRWPassword, "")
 }
 
 func GetConfig() *Config {
