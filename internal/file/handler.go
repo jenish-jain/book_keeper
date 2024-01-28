@@ -48,7 +48,7 @@ func (h *Handler) UploadFile(ctx *gin.Context) {
 		logger.ErrorWithCtx(ctx, "error reading file to bytes", fmt.Sprintf("error : %+v", err.Error()))
 	}
 
-	insertFile, err := h.DBClient.InsertFile(ctx, fileBytes, file.Filename)
+	insertFile, err := h.DBClient.InsertFile(ctx, file.Filename, fileBytes, string(PDF))
 	if err != nil {
 		logger.ErrorWithCtx(ctx, "error storing file to mongo", fmt.Sprintf("error : %+v", err.Error()))
 	}
@@ -66,4 +66,13 @@ func (h *Handler) Delete(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "file deleted successfully"})
 
+}
+
+func (h *Handler) GetAll(ctx *gin.Context) {
+	files, err := h.DBClient.GetAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"data": files})
 }
