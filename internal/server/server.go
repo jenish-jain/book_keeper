@@ -24,6 +24,7 @@ type Server struct {
 
 type RouterGroups struct {
 	rootRouter *gin.Engine
+	files      *gin.RouterGroup
 }
 
 func NewServer(c *config.Config) *Server {

@@ -8,7 +8,9 @@ package main
 
 import (
 	"book_keeper/internal/config"
+	"book_keeper/internal/file"
 	"book_keeper/internal/health"
+	"book_keeper/internal/mongo"
 	"book_keeper/internal/server"
 )
 
@@ -18,8 +20,12 @@ func InitDependencies() (ServerDependencies, error) {
 	configConfig := config.GetConfig()
 	serverServer := server.NewServer(configConfig)
 	handler := health.NewHandler()
+	mongoConfig := config.GetMongoConfigToInject()
+	client := mongo.NewClient(mongoConfig)
+	fileHandler := file.NewHandler(client)
 	handlers := server.Handlers{
 		HealthHandler: handler,
+		FileHandler:   fileHandler,
 	}
 	serverDependencies := ServerDependencies{
 		config:   configConfig,

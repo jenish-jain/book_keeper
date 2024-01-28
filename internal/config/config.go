@@ -55,3 +55,7 @@ func (c *Config) GetMongoConfig() *mongo.Config {
 func GetConfig() *Config {
 	return &AppConfig
 }
+
+func GetMongoConfigToInject() *mongo.Config {
+	return AppConfig.GetMongoConfig()
+}

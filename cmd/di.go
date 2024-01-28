@@ -5,7 +5,9 @@ package main
 
 import (
 	"book_keeper/internal/config"
+	"book_keeper/internal/file"
 	"book_keeper/internal/health"
+	"book_keeper/internal/mongo"
 	"book_keeper/internal/server"
 	"github.com/google/wire"
 )
@@ -21,10 +23,11 @@ func InitDependencies() (ServerDependencies, error) {
 		wire.Struct(new(ServerDependencies), "*"),
 		wire.Struct(new(server.Handlers), "*"),
 		config.GetConfig,
+		config.GetMongoConfigToInject,
 		server.WireSet,
 		health.WireSet,
-		//serviceconfigs.WireSet,
-		//geoquintuples.WireSet,
+		file.WireSet,
+		mongo.WireSet,
 	)
 
 	return ServerDependencies{}, nil
