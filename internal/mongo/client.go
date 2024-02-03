@@ -15,13 +15,14 @@ import (
 )
 
 type Client interface {
-	InsertFile(ctx context.Context, name string, fileBytes []byte, fileType string) (string, error)
-	DeleteFileByID(ctx context.Context, ID string) error
-	GetAll(ctx context.Context) (interface{}, error)
+	InsertFile(name string, fileBytes []byte, fileType string) (string, error)
+	DeleteFileByID(ID string) error
+	GetAllFiles(ctx context.Context) (interface{}, error)
 }
 
 type client struct {
-	db *mongo.Database
+	db         *mongo.Database
+	fileBucket *gridfs.Bucket
 }
 
 type gridfsFile struct {
@@ -32,14 +33,9 @@ type gridfsFile struct {
 	Metadata   map[string]interface{} `bson:"metadata"`
 }
 
-func (d *client) GetAll(ctx context.Context) (interface{}, error) {
-	bucket, err := gridfs.NewBucket(d.db)
-	if err != nil {
-		logger.ErrorWithCtx(ctx, "error creating bucket for fetching file", "event", "FETCH_FILES", "error", err)
-	}
-
+func (d *client) GetAllFiles(ctx context.Context) (interface{}, error) {
 	filter := bson.D{}
-	cursor, err := bucket.GetFilesCollection().Find(ctx, filter)
+	cursor, err := d.fileBucket.GetFilesCollection().Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -49,38 +45,29 @@ func (d *client) GetAll(ctx context.Context) (interface{}, error) {
 	}
 
 	for _, file := range foundFiles {
-		logger.Info("file data %+v", file)
+		logger.DebugWithCtx(ctx, "found files with data", "fileData", file, "event", "FETCH_FILES")
 	}
 	return foundFiles, nil
 }
 
-func (d *client) InsertFile(ctx context.Context, name string, fileBytes []byte, fileType string) (string, error) {
-	bucket, err := gridfs.NewBucket(d.db)
-	if err != nil {
-		logger.ErrorWithCtx(ctx, "error creating bucket for inserting file", "event", "INSERT_FILE", "error", err)
-	}
+func (d *client) InsertFile(name string, fileBytes []byte, fileType string) (string, error) {
 	uploadOpts := options.GridFSUpload().
 		SetMetadata(bson.D{{"type", fileType}})
 
-	fileID, err := bucket.UploadFromStream(
+	fileID, err := d.fileBucket.UploadFromStream(
 		name,
 		bytes.NewBuffer(fileBytes),
 		uploadOpts)
 	if err != nil {
-		logger.ErrorWithCtx(ctx, "error uploading file to db", "event", "INSERT_FILE", "error", err)
 		return "", err
 	}
 
-	return fileID.String(), nil
+	return fileID.Hex(), nil
 }
 
-func (d *client) DeleteFileByID(ctx context.Context, ID string) error {
-	bucket, err := gridfs.NewBucket(d.db)
-	if err != nil {
-		logger.ErrorWithCtx(ctx, "error creating bucket for deleting file", "event", "DELETE_FILE", "error", err)
-	}
+func (d *client) DeleteFileByID(ID string) error {
 	fileId, err := primitive.ObjectIDFromHex(ID)
-	err = bucket.Delete(fileId)
+	err = d.fileBucket.Delete(fileId)
 	if err != nil {
 		return err
 	}
@@ -99,7 +86,12 @@ func NewClient(config *Config) Client {
 	//defer mongoClient.Disconnect(context.Background())
 	// Create a new MongoDB database and collection
 	db := mongoClient.Database(config.databaseName)
+	bucket, err := gridfs.NewBucket(db)
+	if err != nil {
+		logger.Error("error creating bucket for fetching file", "event", "NEW_CLIENT", "error", err)
+	}
 	return &client{
-		db: db,
+		db:         db,
+		fileBucket: bucket,
 	}
 }

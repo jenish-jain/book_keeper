@@ -29,6 +29,7 @@ func Debug(logMsg string, args ...any) {
 }
 
 func DebugWithCtx(ctx context.Context, logMsg string, args ...any) {
+	args = append(args, "request_id", ctx.Value("request_id"))
 	log.DebugContext(ctx, logMsg, args...)
 }
 
@@ -54,6 +55,7 @@ func Error(logMsg string, args ...any) {
 }
 
 func ErrorWithCtx(ctx context.Context, logMsg string, args ...any) {
+	args = append(args, "request_id", ctx.Value("request_id"))
 	log.ErrorContext(ctx, logMsg, args...)
 }
 
