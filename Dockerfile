@@ -21,10 +21,7 @@ COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 WORKDIR /app
 
-USER 0
-RUN mkdir -p uploads
-
-COPY --from=builder /app/config/production.env config/production.env
+#COPY --from=builder /app/config/production.env config/production.env
 COPY --from=builder /app/cmd/main main
 
 # Run the web service on container startup.
