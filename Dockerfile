@@ -13,7 +13,7 @@ RUN go mod download
 # Copy local code to the container image.
 COPY . ./
 
-RUN cd cmd && go build -o main
+RUN cd cmd && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o main
 
 FROM scratch
 
