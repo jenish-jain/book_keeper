@@ -28,8 +28,7 @@ func InitConfig(configName string) *Config {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using Config file:", viper.ConfigFileUsed())
 	} else {
-		fmt.Printf("Cannot read Config file %s.env", configName)
-		panic(err)
+		fmt.Printf("Cannot read Config file %s.env, relying on env configs", configName)
 	}
 
 	err := viper.UnmarshalExact(&AppConfig)
