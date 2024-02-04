@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-keeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-keeper
+  template:
+    metadata:
+      labels:
+        app: book-keeper
+    spec:
+      containers:
+        - name: book-keeper
+          image: ghcr.io/jenish-jain/book_keeper:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: config-volume
+              mountPath: "/config"
+              readOnly: true
+      imagePullSecrets:
+      # create secret using the below command
+      # kubectl create secret docker-registry regcred --docker-server=https://ghcr.io --docker-username=<github-name> --docker-password=<github-personal-access-token> --docker-email=<github-email>
+      - name: regcred
+      volumes:
+        - name: config-volume
+          configMap:
+            name: book-keeper-config
+            items:
+              - key: "production.env"
+                path: "production.env"

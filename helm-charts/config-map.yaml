@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: book-keeper-config
+  labels:
+    app: book-keeper
+data:
+  production.env: |-
+    SERVER_PORT =8080
+    LOG_LEVEL =debug
+    MONGO_HOST =mongo.dev:70217
+    MONGO_RW_USERNAME =read_user
+    MONGO_RW_PASSWORD =secret
+    ASSETS_DATABASE =book_keeper
