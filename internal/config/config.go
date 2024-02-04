@@ -35,7 +35,7 @@ func InitConfig(configName string) *Config {
 	if err != nil {
 		panic(fmt.Errorf("fatal error unable to Unmarshal Config file: %s", err))
 	}
-
+	fmt.Printf("Config file loaded successfully %+v\n", &AppConfig)
 	return &AppConfig
 }
 
