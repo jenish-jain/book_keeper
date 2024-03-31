@@ -1,17 +1,18 @@
 package mongo
 
 import (
-	"book_keeper/internal/logger"
 	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/jenish-jain/logger"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"time"
 )
 
 type Client interface {

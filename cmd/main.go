@@ -2,7 +2,8 @@ package main
 
 import (
 	"book_keeper/internal/config"
-	"book_keeper/internal/logger"
+
+	"github.com/jenish-jain/logger"
 )
 
 func main() {

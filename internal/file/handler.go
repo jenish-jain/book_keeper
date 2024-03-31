@@ -1,12 +1,12 @@
 package file
 
 import (
-	"book_keeper/internal/logger"
 	"book_keeper/internal/mongo"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jenish-jain/logger"
 )
 
 type Handler struct {

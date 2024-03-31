@@ -2,7 +2,6 @@ package server
 
 import (
 	"book_keeper/internal/config"
-	"book_keeper/internal/logger"
 	"context"
 	"errors"
 	"fmt"
@@ -14,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jenish-jain/logger"
 )
 
 type Server struct {

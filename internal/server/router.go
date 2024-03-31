@@ -3,9 +3,10 @@ package server
 import (
 	"book_keeper/internal/file"
 	"book_keeper/internal/health"
-	"book_keeper/internal/logger"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jenish-jain/logger"
 )
 
 type Handlers struct {
